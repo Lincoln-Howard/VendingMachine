@@ -1,54 +1,60 @@
-
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+  // food and drink vending machines
+  public static VendingMachine drink, food;
   @Override
   public void start(Stage primaryStage) throws Exception {
-    // title: Vending Machines
+    read ();
+	// title: Vending Machines
     primaryStage.setTitle ("Vending Machines");
     // create the root pane
     BorderPane root = new BorderPane ();
-    // set the root pane
-    primaryStage.setScene (new Scene (root, 500, 350));
-    // vertical box
-    VBox sidebar = new VBox ();
-    // add the vbox
-    root.setLeft (sidebar);
-    // vendor pane
-    GridPane vendor_pane = new GridPane ();
-    // vendor button
-    Button vendor_button = new Button ("vendor");
-    // event handler for the vendor button
-    vendor_button.addEventHandler (MouseEvent.MOUSE_CLICKED, new SimpleButtonHandler (primaryStage, vendor_pane));
-    // add vendor button
-    sidebar.getChildren().add (vendor_button);
-    // show the gui
-    primaryStage.show ();
+    
   }
-  // simple button handler
-  private class SimpleButtonHandler implements EventHandler <MouseEvent> {
-    // the stage to set
-    private Stage stage;
-    // the pane to add
-    private Pane pane;
-    // constructor
-    public SimpleButtonHandler (Stage stage, Pane pane) {
-      this.stage = stage;
-      this.pane = pane;
-    }
-    @Override
-    public void handle(MouseEvent event) {
-      stage.setScene (new Scene (pane, 500, 350));
-    }
+  // save the vending machines
+  private void write () {
+	  try {
+		ObjectOutputStream food_writer, drink_writer;
+		food_writer = new ObjectOutputStream (new FileOutputStream (new File ("food.vem")));
+		food_writer.writeObject (food);
+		food_writer.close ();
+		drink_writer = new ObjectOutputStream (new FileOutputStream (new File ("drinks.vem")));
+		drink_writer.writeObject (drink);
+		drink_writer.close ();
+	} catch (Exception e) {
+	}
+  }
+  // read the vending machines
+  private void read () {
+	try {
+      ObjectInputStream food_reader, drink_reader;
+      food_reader = new ObjectInputStream (new FileInputStream (new File ("food.vem")));
+      food = (VendingMachine) food_reader.readObject ();
+      food_reader.close ();
+      drink_reader = new ObjectInputStream (new FileInputStream (new File ("drinks.vem")));
+      drink = (VendingMachine) drink_reader.readObject ();
+      drink_reader.close ();
+	} catch (Exception e) {
+		food = new VendingMachine ();
+		drink = new VendingMachine ();
+	}
   }
 }
