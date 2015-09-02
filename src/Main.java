@@ -3,34 +3,64 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
   // food and drink vending machines
   public static VendingMachine drink, food;
+  // the root pane
+  public static BorderPane root;
   @Override
   public void start(Stage primaryStage) throws Exception {
-    read ();
+    // read food and drink vending machines from file
+	read ();
 	// title: Vending Machines
     primaryStage.setTitle ("Vending Machines");
     // create the root pane
-    BorderPane root = new BorderPane ();
-    
+    root = new BorderPane ();
+    // create sidebar
+    VBox sidebar = new VBox ();
+    // create admin button
+    Button admin_btn = new Button ("Admin");
+    // width
+    admin_btn.setPrefWidth (80);
+    // handle admin
+    admin_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, new AdminHandler ());
+    // create purchase button
+    Button purchase_btn = new Button ("Purchase");
+    // width
+    purchase_btn.setPrefWidth (80);
+    // $$ input level
+    Label money_lbl = new Label ("Cash in:");
+    // width
+    money_lbl.setPrefWidth (80);
+    // $$ input
+    TextField money_input = new TextField ();
+    // width
+    money_input.setPrefWidth (80);
+    // tooltip
+    money_input.setTooltip (new Tooltip ("ex: 0.75"));
+    // add all to sidebar
+    sidebar.getChildren ().addAll (admin_btn, purchase_btn, money_lbl, money_input);
+    // set vbox left
+    root.setLeft (sidebar);
+    // set root to root
+    primaryStage.setScene(new Scene (root, 400, 300));
+    // show primary stage
+    primaryStage.show ();
   }
   // save the vending machines
-  private void write () {
+  public static void write () {
 	  try {
 		ObjectOutputStream food_writer, drink_writer;
 		food_writer = new ObjectOutputStream (new FileOutputStream (new File ("food.vem")));
@@ -43,7 +73,7 @@ public class Main extends Application {
 	}
   }
   // read the vending machines
-  private void read () {
+  public static void read () {
 	try {
       ObjectInputStream food_reader, drink_reader;
       food_reader = new ObjectInputStream (new FileInputStream (new File ("food.vem")));
