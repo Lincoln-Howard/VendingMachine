@@ -42,6 +42,16 @@ public class VendingMachine implements Serializable {
 		return costs.size ();
 	}
 	/**
+	 * Checks if the vending machine has this kind of item.
+	 * @return True if the vending machine has the item.
+	 */
+	public boolean has (String name) {
+	  for (int i = 0; i < this.size (); i++)
+	    if (info (i).name ().equals (name))
+	      return true;
+	  return false;
+	}
+	/**
 	 * Add a dispenser to the vending machine.
 	 * @param cost The cost of the item.
 	 * @param dispenser The dispenser.

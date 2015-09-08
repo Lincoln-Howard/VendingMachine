@@ -27,10 +27,18 @@ public class Main extends Application {
 	public static TextField usr, money;
 	// the password input
 	public static PasswordField pwd;
+	// the admin button
+	public static Button admin_btn;
+	// the rightbar
+	public static VBox rightbar;
+	// main
+	public static void main (String [] args) {
+	  Application.launch (args);
+	}
 	// start the application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// read food and drink vending machines from file
+	  // read food and drink vending machines from file
 		read();
 		// title: Vending Machines
 		primaryStage.setTitle ("Vending Machines");
@@ -38,6 +46,8 @@ public class Main extends Application {
 		root = new BorderPane();
 		// create sidebar
 		VBox sidebar = new VBox();
+		// create rightbar
+		rightbar = new VBox ();
 		// create username label
 		Label usr_lbl = new Label ("Username:");
 		// set width
@@ -55,7 +65,7 @@ public class Main extends Application {
     // set width
     pwd.setPrefWidth (100);
 		// create admin login button
-		Button admin_btn = new Button ("Log In!");
+		admin_btn = new Button ("Log In!");
 		// width
 		admin_btn.setPrefWidth(100);
 		// handle admin
@@ -74,18 +84,22 @@ public class Main extends Application {
 		money.setPrefWidth (100);
 		// tooltip
 		money.setTooltip (new Tooltip ("ex: 0.75"));
-		// add all to sidebar
-		sidebar.getChildren().addAll(usr_lbl, usr, pwd_lbl, pwd, admin_btn, money_lbl, money, purchase_btn);
-		// set vbox left
-		root.setLeft(sidebar);
+		// add all to vboxs
+		sidebar.getChildren().addAll(usr_lbl, usr, pwd_lbl, pwd, admin_btn);
+		rightbar.getChildren ().addAll (money_lbl, money, purchase_btn);
+		// set vboxs
+		root.setLeft (sidebar);
+		root.setRight (rightbar);
 		// set root to root
 		primaryStage.setScene(new Scene(root, 400, 300));
+		// not resizable
+		primaryStage.setResizable(false);
 		// show primary stage
 		primaryStage.show();
 	}
 
 	// save the vending machines
-	public static void write() {
+	public static void write () {
 		try {
 			ObjectOutputStream food_writer, drink_writer;
 			food_writer = new ObjectOutputStream(new FileOutputStream(new File("food.vem")));
@@ -99,7 +113,7 @@ public class Main extends Application {
 	}
 
 	// read the vending machines
-	public static void read() {
+	private void read () {
 		try {
 			ObjectInputStream food_reader, drink_reader;
 			food_reader = new ObjectInputStream(new FileInputStream(new File("food.vem")));
