@@ -103,7 +103,11 @@ public class VendingMachine implements Serializable {
 			throws InsufficientFundsException {
 		if (funds < costs.get (dispenser))
 			throw new InsufficientFundsException ();
-		return dispensers.get (dispenser).purchase ();
+		FoodInfo ret = dispensers.get (dispenser).purchase ();
+		if (stock (dispenser) == 0) {
+		  removeItem (dispenser);
+		}
+		return ret;
 	}
 	/**
 	 * Run the total report for the vending machine.

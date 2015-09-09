@@ -47,24 +47,28 @@ public class AdminView extends GridPane {
     @Override
     public void handle(Event event) {
       admin (new AddFoodView ());
+      Main.output.setText ("Change to add food view");
     }
   }
   private class DrinkBtnHandler implements EventHandler <Event> {
     @Override
     public void handle(Event event) {
       admin (new AddDrinkView ());
+      Main.output.setText ("Change to add drink view");
     }
   }
   private class LogBtnHandler implements EventHandler <Event> {
     @Override
     public void handle(Event event) {
       admin (new TransactionLogView ());
+      Main.output.setText ("Transaction logs");
     }
   }
   private class InvBtnHandler implements EventHandler <Event> {
     @Override
     public void handle(Event event) {
       admin (new InvLogView ());
+      Main.output.setText ("Inventory view");
     }
   }
 }

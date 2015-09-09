@@ -29,9 +29,16 @@ public class Main extends Application {
 	public static PasswordField pwd;
 	// the admin button
 	public static Button admin_btn;
-	// the rightbar
+	// the side/right-bar
+  public static VBox sidebar;
 	public static VBox rightbar;
-	// main
+	// the purchase food button
+	public static Button pfb;
+  // the purchase drink button
+  public static Button pdb;
+  // output
+	public static Label output;
+  // main
 	public static void main (String [] args) {
 	  Application.launch (args);
 	}
@@ -45,7 +52,7 @@ public class Main extends Application {
 		// create the root pane
 		root = new BorderPane();
 		// create sidebar
-		VBox sidebar = new VBox();
+		sidebar = new VBox();
 		// create rightbar
 		rightbar = new VBox ();
 		// create username label
@@ -71,9 +78,13 @@ public class Main extends Application {
 		// handle admin
 		admin_btn.addEventHandler (MouseEvent.MOUSE_CLICKED, new AdminHandler());
 		// create purchase button
-		Button purchase_btn = new Button ("Purchase");
+		pfb = new Button ("Purchase Food");
 		// width
-		purchase_btn.setPrefWidth (100);
+		pfb.setPrefWidth (100);
+		// create purchase button
+    pdb = new Button ("Purchase Drink");
+    // width
+    pdb.setPrefWidth (100);
 		// $$ input level
 		Label money_lbl = new Label ("Cash in:");
 		// width
@@ -86,10 +97,16 @@ public class Main extends Application {
 		money.setTooltip (new Tooltip ("ex: 0.75"));
 		// add all to vboxs
 		sidebar.getChildren().addAll(usr_lbl, usr, pwd_lbl, pwd, admin_btn);
-		rightbar.getChildren ().addAll (money_lbl, money, purchase_btn);
+		rightbar.getChildren ().addAll (money_lbl, money, pfb, pdb);
 		// set vboxs
 		root.setLeft (sidebar);
 		root.setRight (rightbar);
+		// output bar
+		output = new Label ();
+		// set it
+		root.setBottom (output);
+		// set center
+		root.setCenter (new MachineView ());
 		// set root to root
 		primaryStage.setScene(new Scene(root, 400, 300));
 		// not resizable
@@ -97,7 +114,6 @@ public class Main extends Application {
 		// show primary stage
 		primaryStage.show();
 	}
-
 	// save the vending machines
 	public static void write () {
 		try {
